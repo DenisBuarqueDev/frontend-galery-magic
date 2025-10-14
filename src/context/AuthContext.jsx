@@ -10,23 +10,40 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [loading, setLoading] = useState(true);
 
-  // Verifica se há token e usuário salvos
+  // 🔍 Verifica se o token e o usuário são válidos
   useEffect(() => {
-    const userData = localStorage.getItem("user");
+    const checkAuth = async () => {
+      const userData = localStorage.getItem("user");
 
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
+      if (token && userData) {
+        try {
+          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-    setLoading(false);
+          // Verifica se o token ainda é válido (rota do backend para validar token)
+          const res = await api.get("/auth/validate");
+
+          // Se a API confirmar, restaura o usuário
+          if (res.status === 200) {
+            setUser(JSON.parse(userData));
+          } else {
+            handleLogout();
+          }
+        } catch (error) {
+          console.warn("Sessão expirada ou inválida:", error);
+          handleLogout();
+        }
+      }
+
+      setLoading(false);
+    };
+
+    checkAuth();
   }, [token]);
 
-  // Função de login com tratamento de erro
+  // 🔐 Função de login
   const login = async (email, password) => {
     try {
       const res = await api.post("/auth/login", { email, password });
-
       const { token: jwt, user: userData } = res.data;
 
       localStorage.setItem("token", jwt);
@@ -34,20 +51,20 @@ export const AuthProvider = ({ children }) => {
 
       setToken(jwt);
       setUser(userData);
-
       api.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
 
       navigate("/dashboard");
     } catch (error) {
       console.error("Erro no login:", error);
       throw new Error(
-        error.response?.data?.message || "Falha ao fazer login. Verifique suas credenciais."
+        error.response?.data?.message ||
+          "Falha ao fazer login. Verifique suas credenciais."
       );
     }
   };
 
-  // Função de logout
-  const logout = () => {
+  // 🚪 Logout seguro (também usado para expiração de sessão)
+  const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
@@ -57,7 +74,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, token, login, logout: handleLogout, loading }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );
