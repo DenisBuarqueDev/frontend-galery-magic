@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api", // ajuste conforme seu backend
+  //baseURL: "http://localhost:5000/api",
+  baseURL: "https://backend-galery-magic.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {
