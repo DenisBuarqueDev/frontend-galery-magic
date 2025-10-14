@@ -91,8 +91,7 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
       window.dispatchEvent(new Event("localStorageUpdated"));
        window.speechSynthesis.cancel(); // Para qualquer fala
        setIsReading(false);
-
-      console.log("✅ História criada e salva com sucesso!");
+      //console.log("✅ História criada e salva com sucesso!");
     } catch (err) {
       console.error("Erro addToHistory: ", err);
       alert("Erro ao gerar história mágica. Tente novamente.");

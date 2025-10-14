@@ -1,19 +1,15 @@
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useState } from "react";
-import { FaWandMagicSparkles } from "react-icons/fa6";
 import { GiMusicalNotes, GiSoundOff } from "react-icons/gi";
 import { FaRegTrashCan } from "react-icons/fa6";
 import api from "../axios/api";
 
-import { GiBroom } from "react-icons/gi";
-
 const Store = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(0);
   const [isReading, setIsReading] = useState(false);
 
   // 🔹 Buscar todas as histórias salvas do usuário autenticado
@@ -103,19 +99,16 @@ const Store = () => {
     setIsReading(false);
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-screen">
-        <div role="status">
-          <img src="/src/assets/dog-animi-gif.gif" className="w-40 h-40 mr-2" />
-        </div>
-        <p className="text-2xl text-blue-700 font-bold">Aguarde...</p>
-      </div>
-    );
-  }
-
   return (
     <main className="flex flex-col p-3 m-auto w-full max-w-screen-xl md:p-4">
+      {/* 🔥 Overlay de loading */}
+      {loading && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
+          <p className="text-2xl text-white font-bold mt-4">
+            Carregado histórias...
+          </p>
+        </div>
+      )}
 
       <section className="p-2 mx-auto max-w-screen-xl text-center mb-6">
         <div className="">
@@ -141,7 +134,9 @@ const Store = () => {
             >
               <div className="flex flex-col  w-full">
                 <div className="flex items-center justify-between mb-1">
-                  <h3 className="text-2xl font-bold text-amber-700">{story.title}</h3>
+                  <h3 className="text-2xl font-bold text-amber-700">
+                    {story.title}
+                  </h3>
 
                   <div
                     className="inline-flex gap-5 rounded-md shadow-xs"
@@ -167,7 +162,9 @@ const Store = () => {
                     </button>
                   </div>
                 </div>
-                <div className="text-lg text-amber-600 font-normal">{story.text}</div>
+                <div className="text-lg text-amber-600 font-normal">
+                  {story.text}
+                </div>
               </div>
             </div>
           ))}

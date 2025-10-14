@@ -162,21 +162,9 @@ const Gallery = () => {
       {/* 🔥 Overlay de loading */}
       {(writeHistory || drawerHistory) && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
-          <div role="status">
-            <img
-              src={
-                writeHistory
-                  ? "https://frontend-galery-magic.vercel.app/src/assets/dog-animi-gif.gif"
-                  : "https://frontend-galery-magic.vercel.app/src/assets/gaveta-anime-gif.gif"
-              }
-              className="w-40 h-40 mr-2"
-            />
-          </div>
           <p className="text-2xl text-white font-bold mt-4">
             {writeHistory ? (
-              <>
-                Criando história <FaWandMagicSparkles className="inline-block ml-2" />
-              </>
+              "Criando história..."
             ) : (
               "Guardando história..."
             )}
