@@ -6,6 +6,7 @@ import { RiResetLeftFill, RiArchiveDrawerFill } from "react-icons/ri";
 import api from "../axios/api";
 import Products from "../components/Products";
 
+
 const Gallery = () => {
   const { user } = useContext(AuthContext);
 
@@ -165,8 +166,8 @@ const Gallery = () => {
             <img
               src={
                 writeHistory
-                  ? "/src/assets/dog-animi-gif.gif"
-                  : "/src/assets/gaveta-anime-gif.gif"
+                  ? "https://frontend-galery-magic.vercel.app/src/assets/dog-animi-gif.gif"
+                  : "https://frontend-galery-magic.vercel.app/src/assets/gaveta-anime-gif.gif"
               }
               className="w-40 h-40 mr-2"
             />
