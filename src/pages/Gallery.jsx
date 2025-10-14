@@ -206,74 +206,32 @@ const Gallery = () => {
     }
   };
 
-  async function gerarAudio() {
-    setWriteHistory(true);
-    setAudioUrl(null);
-    try {
-      const response = await fetch(
-        `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "xi-api-key": ELEVEN_API_KEY,
-          },
-          body: JSON.stringify({
-            text: "Com um brilho mágico nos olhos, a pequena Sofia avistou um imenso castelo na colina, suas torres reluzindo ao sol como estrelas douradas. Decidida a explorar, ela correu em direção à grande porta de madeira, que estava entreaberta, convidando-a a entrar em aventuras incríveis. Ao cruzar o limiar, Sofia ouviu sussurros encantados que pareciam chamar seu nome, prometendo mistérios e tesouros além da imaginação!",
-            model_id: MODEL_ID,
-            output_format: "mp3_44100_128",
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        const err = await response.text();
-        throw new Error("Erro da API: " + err);
-      }
-
-      // transforma a resposta (stream binário) em Blob
-      const audioBlob = await response.blob();
-      const url = URL.createObjectURL(audioBlob);
-      setAudioUrl(url);
-      const audio = new Audio(url);
-      audio.play();
-    } catch (error) {
-      console.error(error);
-      alert("Erro ao gerar áudio.");
-    } finally {
-      setWriteHistory(false);
-    }
-  }
-
   if (loading) {
     return "Carregando Galeria...";
   }
 
-  if (writeHistory) {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-screen">
-        <div role="status">
-          <img src="/src/assets/dog-animi-gif.gif" className="w-40 h-40 mr-2" />
-        </div>
-        <p className="flex items-center text-xl text-white text-center font-bold rounded-full py-1 px-4 bg-amber-600">
-          Criando história
-          <FaWandMagicSparkles className="w-4 h-4 text-white ml-2" />
-        </p>
-      </div>
-    );
-  }
-
-  if (drawerHistory) {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-screen">
+  {
+    (writeHistory || drawerHistory) && (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
         <div role="status">
           <img
-            src="/src/assets/gaveta-anime-gif.gif"
+            src={
+              writeHistory
+                ? "/src/assets/dog-animi-gif.gif"
+                : "/src/assets/gaveta-anime-gif.gif"
+            }
             className="w-40 h-40 mr-2"
           />
         </div>
-        <p className="text-2xl text-blue-700 font-bold">
-          Guardando história...
+        <p className="text-2xl text-white font-bold mt-4">
+          {writeHistory ? (
+            <>
+              Criando história{" "}
+              <FaWandMagicSparkles className="inline-block ml-2" />
+            </>
+          ) : (
+            "Guardando história..."
+          )}
         </p>
       </div>
     );
@@ -372,7 +330,11 @@ const Gallery = () => {
       )}
 
       {/* Products Component */}
-      <Products setWriteHistory={setWriteHistory} count={count} setIsReading={setIsReading} />
+      <Products
+        setWriteHistory={setWriteHistory}
+        count={count}
+        setIsReading={setIsReading}
+      />
     </main>
   );
 };
