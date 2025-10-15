@@ -9,11 +9,12 @@ import Gallery from "./pages/Gallery";
 import Perfil from "./pages/Perfil";
 import Parents from "./pages/Parents";
 import Story from "./pages/Story";
+import Signature from "./pages/Signature";
 
 function App() {
 
   const location = useLocation();
-  const hiddenRoutes = ["/"];
+  const hiddenRoutes = ["/", "/assinatura"];
   const hideLayout = hiddenRoutes.includes(location.pathname);
 
   return (
@@ -22,6 +23,7 @@ function App() {
         {!hideLayout && <Header />}
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/assinatura" element={<Signature />} />
           <Route
             path="/galery"
             element={

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../axios/api";
 import { Link } from "react-router-dom";
-import { GiMusicalNotes } from "react-icons/gi";
+import { GiMusicalNotes, GiSpeaker } from "react-icons/gi";
 
 const Products = ({ setWriteHistory, count, setIsReading }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [creatingStory, setCreatingStory] = useState(false); // 🌟 Novo estado
+  const [creatingStory, setCreatingStory] = useState(false);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -36,67 +36,57 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
       const data = localStorage.getItem("#MagicHistory");
       return data ? JSON.parse(data) : [];
     } catch (err) {
-      console.error("Erro carregar histórias do localStorage!:", err);
+      console.error("Erro ao carregar histórias do localStorage:", err);
       return [];
     }
   };
 
   const addToHistory = async (galery) => {
     setWriteHistory(true);
-    setCreatingStory(true); // 🌀 Mostra a animação de criação
+    setCreatingStory(true);
 
     try {
       const history = getHistory();
 
-      // Evita duplicadas
       const exists = history.find((item) => item.title === galery.title);
       if (exists) {
-        console.log("Imagem já foi adicionada à história.");
         setCreatingStory(false);
         setWriteHistory(false);
         return;
       }
 
-      // Checa limite de histórias
       if (count >= 5) {
         alert(
-          "Limite de 5 histórias atingido. Por favor, exclua algumas histórias antigas para adicionar novas."
+          "Limite de 5 histórias atingido. Exclua algumas histórias antigas para adicionar novas."
         );
         setCreatingStory(false);
         setWriteHistory(false);
         return;
       }
 
-      // Chama IA Gemini via backend
       const res = await api.post(`/products/gemini/story`, {
         word: galery.title,
       });
 
-      if (!res.data?.story) {
-        throw new Error("Erro: nenhuma história recebida do servidor.");
-      }
+      if (!res.data?.story) throw new Error("Erro: nenhuma história recebida.");
 
-      // Cria o novo item
       const newItem = {
         title: galery.title,
         image: galery.image,
         description: res.data.story,
       };
 
-      // Salva no localStorage
       const updatedHistory = [...history, newItem];
       localStorage.setItem("#MagicHistory", JSON.stringify(updatedHistory));
 
-      // Dispara atualização para Galery.jsx
       window.dispatchEvent(new Event("localStorageUpdated"));
-       window.speechSynthesis.cancel(); // Para qualquer fala
-       setIsReading(false);
-      //console.log("✅ História criada e salva com sucesso!");
+      window.speechSynthesis.cancel();
+      setIsReading(false);
     } catch (err) {
       console.error("Erro addToHistory: ", err);
       alert("Erro ao gerar história mágica. Tente novamente.");
     } finally {
-      setCreatingStory(false); // 🔚 Esconde a animação
+      setCreatingStory(false);
       setWriteHistory(false);
     }
   };
@@ -104,6 +94,20 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
   const playSound = (clickSound) => {
     const audio = new Audio(clickSound);
     audio.play();
+  };
+
+  // 🗣️ Função que lê o título do produto em voz alta
+  const readTitle = (title) => {
+    if (!window.speechSynthesis) {
+      alert("Seu navegador não suporta leitura de voz.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(title);
+    utterance.lang = "pt-BR";
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
   };
 
   if (loading) {
@@ -119,39 +123,52 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
   }
 
   return (
-    <>
-      <section className="flex max-w-screen-xl my-5">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 max-w-screen-xl w-full">
-          {products &&
-            products.map((item) => (
-              <div
-                key={item._id}
-                className="flex flex-col bg-yellow-100 items-center justify-center max-w-screen-ms w-full border-4 border-amber-200 p-4 shadow-amber-200 shadow-md rounded-lg hover:scale-105 transition-transform dark:bg-gray-800"
-              >
-                <Link onClick={() => addToHistory(item)}>
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="mb-2 w-full object-cover rounded-md"
-                  />
-                </Link>
-                {item.sound ? (
-                  <div className="flex items-center w-full justify-between">
-                    <span className="text-xl font-bold text-amber-600">{item.title}</span>
-                    <button onClick={() => playSound(item.sound)}>
-                      <GiMusicalNotes className="w-5 h-5" />
+    <section className="flex max-w-screen-xl my-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 max-w-screen-xl w-full">
+        {products &&
+          products.map((item) => (
+            <div
+              key={item._id}
+              className="flex flex-col bg-yellow-100 items-center justify-center max-w-screen-ms w-full border-4 border-amber-200 p-4 shadow-amber-200 shadow-md rounded-lg hover:scale-105 transition-transform dark:bg-gray-800"
+            >
+              <Link onClick={() => addToHistory(item)}>
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="mb-2 w-full object-cover rounded-md"
+                />
+              </Link>
+
+              <div className="flex items-center justify-between w-full">
+                <span className="text-lg font-bold text-amber-600 truncate">
+                  {item.title}
+                </span>
+
+                <div className="flex items-center gap-1">
+                  {/* 🔊 Botão para ler o título */}
+                  <button
+                    onClick={() => readTitle(item.title)}
+                    title="Ouvir título"
+                    className="p-1 hover:scale-110 transition-transform"
+                  >
+                    <GiSpeaker className="w-6 h-6 text-amber-600" />
+                  </button>
+                  {/* 🎵 Se tiver som, mostra o botão musical */}
+                  {item.sound && (
+                    <button
+                      onClick={() => playSound(item.sound)}
+                      title="Ouvir som"
+                      className="p-1 hover:scale-110 transition-transform"
+                    >
+                      <GiMusicalNotes className="w-5 h-5 text-amber-600" />
                     </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center w-full">
-                    <span className="text-xl font-bold text-amber-600">{item.title}</span>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            ))}
-        </div>
-      </section>
-    </>
+            </div>
+          ))}
+      </div>
+    </section>
   );
 };
 
