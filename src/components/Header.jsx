@@ -92,7 +92,7 @@ const Header = () => {
                 <GiSoundOn className="mr-2 w-5 h-5" /> Histórias
               </Link>
             </li>
-            <li>
+            {/*<li>
               <Link
                 to="/parents"
                 className="flex items-center py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
@@ -107,7 +107,7 @@ const Header = () => {
               >
                 <LuBaby className="mr-2" /> Baby
               </Link>
-            </li>
+            </li>*/}
 
             {/* Logout no menu mobile */}
             <li className="md:hidden mt-2">
