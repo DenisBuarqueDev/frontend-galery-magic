@@ -118,7 +118,7 @@ const WordGame = () => {
           />
         )}
 
-        <div style={{ marginTop: "20px" }}>
+        <div className="mt-5 max-w-screen-sm px-2">
           <WordDisplay
             selectedLetters={selectedLetters}
             removeLetter={removeLetter}

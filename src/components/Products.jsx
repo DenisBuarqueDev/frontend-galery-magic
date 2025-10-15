@@ -153,12 +153,12 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
                 />
               </Link>
 
-              <div className="flex items-center justify-between w-full">
-                <span className="text-lg font-bold text-amber-600 truncate">
+              <div className="flex flex-col w-full md:flex-row md:justify-between">
+                <span className="text-xl text-center font-bold text-amber-700 truncate mb-2 md:mb-0">
                   {item.title}
                 </span>
 
-                <div className="flex items-center gap-1">
+                <div className="flex items-center justify-between gap-1">
                   {/* 🔊 Botão para ler o título */}
                   <button
                     onClick={() => readTitle(item.title)}
@@ -187,6 +187,10 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
                   </Link>
                 </div>
               </div>
+
+
+
+
             </div>
           ))}
       </div>
