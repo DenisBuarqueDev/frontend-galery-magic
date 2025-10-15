@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../axios/api";
 import { Link } from "react-router-dom";
 import { GiMusicalNotes, GiSpeaker } from "react-icons/gi";
+import { GrGamepad } from "react-icons/gr";
 
 const Products = ({ setWriteHistory, count, setIsReading }) => {
   const [products, setProducts] = useState([]);
@@ -132,7 +133,7 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
 
   return (
     <section className="flex max-w-screen-xl my-5">
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 max-w-screen-xl w-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-screen-xl w-full">
         {products &&
           products.map((item) => (
             <div
@@ -176,6 +177,14 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
                       <GiMusicalNotes className="w-5 h-5 text-amber-600" />
                     </button>
                   )}
+                  
+                  {/* 🔊 Botão para ler o título */}
+                  <Link 
+                  to={`/wordgame/${item._id}`}
+                    className="p-1 hover:scale-110 transition-transform"
+                  >
+                    <GrGamepad className="w-6 h-6 text-amber-600" />
+                  </Link>
                 </div>
               </div>
             </div>

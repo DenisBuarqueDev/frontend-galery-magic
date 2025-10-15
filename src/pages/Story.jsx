@@ -1,6 +1,5 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useState } from "react";
 import { GiMusicalNotes, GiSoundOff } from "react-icons/gi";
 import { FaRegTrashCan } from "react-icons/fa6";
 import api from "../axios/api";

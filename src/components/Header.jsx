@@ -3,9 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Link, useLocation } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiImageAiFill } from "react-icons/ri";
-import { LuBaby } from "react-icons/lu";
-import { FaGear } from "react-icons/fa6";
-import { GiSoundOn } from "react-icons/gi";
+import { GiMusicalNotes } from "react-icons/gi";
 import { FaSignOutAlt } from "react-icons/fa";
 
 const Header = () => {
@@ -89,7 +87,7 @@ const Header = () => {
                 to="/story"
                 className="flex items-center py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
               >
-                <GiSoundOn className="mr-2 w-5 h-5" /> Histórias
+                <GiMusicalNotes className="mr-2 w-4 h-4" /> Histórias
               </Link>
             </li>
             {/*<li>

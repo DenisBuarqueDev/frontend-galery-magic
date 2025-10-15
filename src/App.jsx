@@ -9,7 +9,7 @@ import Gallery from "./pages/Gallery";
 import Perfil from "./pages/Perfil";
 import Parents from "./pages/Parents";
 import Story from "./pages/Story";
-import Signature from "./pages/Signature";
+import WordGame from "./pages/WordGame";
 
 function App() {
 
@@ -23,7 +23,6 @@ function App() {
         {!hideLayout && <Header />}
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/assinatura" element={<Signature />} />
           <Route
             path="/galery"
             element={
@@ -53,6 +52,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Story />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/wordgame/:id"
+            element={
+              <ProtectedRoute>
+                <WordGame />
               </ProtectedRoute>
             }
           />
