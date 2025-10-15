@@ -110,6 +110,14 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
     window.speechSynthesis.speak(utterance);
   };
 
+  // 🔤 Função que retorna "Ba" para "Barco"
+  const getDuasLetras = (titulo) => {
+    if (typeof titulo !== "string" || titulo.length === 0) return "";
+    const primeira = titulo.charAt(0).toUpperCase();
+    const segunda = titulo.charAt(0).toLowerCase();
+    return `${primeira} - ${segunda}`;
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center">
@@ -131,6 +139,11 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
               key={item._id}
               className="flex flex-col bg-yellow-100 items-center justify-center max-w-screen-ms w-full border-4 border-amber-200 p-4 shadow-amber-200 shadow-md rounded-lg hover:scale-105 transition-transform dark:bg-gray-800"
             >
+              {/* 🔤 Mostra as duas letras (ex: Ba) */}
+              <span className="font-normal text-amber-700 text-xl" style={{ fontFamily: "PlaywriteDESAS-Regular" }}>
+                {getDuasLetras(item.title)}
+              </span>
+
               <Link onClick={() => addToHistory(item)}>
                 <img
                   src={item.image}
