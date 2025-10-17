@@ -12,6 +12,7 @@ import Perfil from "./pages/Perfil";
 import Parents from "./pages/Parents";
 import Story from "./pages/Story";
 import WordGame from "./pages/WordGame";
+import WordMatchGame from "./pages/WordMatchGame";
 
 function App() {
   const location = useLocation();
@@ -73,7 +74,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/wordcombine"
+            element={
+              <ProtectedRoute>
+                <WordMatchGame />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
+        
       </ProductsProvider>
     </AuthProvider>
   );

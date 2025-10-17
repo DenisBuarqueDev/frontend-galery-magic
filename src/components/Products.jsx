@@ -14,11 +14,6 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
   //const [isOpen, setIsOpen] = useState(false);
   //const toggleMenu = () => setIsOpen((prev) => !prev);
 
-  const handleUpdate = async () => {
-    clearProducts(); // limpa o cache
-    await fetchProducts(); // carrega os novos produtos
-  };
-
   const getHistory = () => {
     try {
       const data = localStorage.getItem("#MagicHistory");
