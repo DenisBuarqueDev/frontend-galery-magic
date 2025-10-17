@@ -5,6 +5,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { RiImageAiFill } from "react-icons/ri";
 import { GiMusicalNotes } from "react-icons/gi";
 import { FaSignOutAlt } from "react-icons/fa";
+import { LiaFlagUsaSolid } from "react-icons/lia";
 
 const Header = () => {
   const { logout } = useContext(AuthContext);
@@ -88,6 +89,14 @@ const Header = () => {
                 className="flex items-center py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
               >
                 <GiMusicalNotes className="mr-2 w-4 h-4" /> Histórias
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/english"
+                className="flex items-center py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+              >
+                <LiaFlagUsaSolid className="mr-2 w-4 h-4" /> Inglês
               </Link>
             </li>
             {/*<li>

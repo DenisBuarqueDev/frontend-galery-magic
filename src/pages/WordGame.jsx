@@ -14,13 +14,23 @@ function shuffleArray(array) {
     .map((a) => a[1]);
 }
 
+// Função para normalizar texto: remover acentos, espaços e caracteres especiais
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD") // separa os acentos das letras
+    .replace(/[\u0300-\u036f]/g, "") // remove acentos
+    .replace(/[^a-z0-9]/g, ""); // remove caracteres que não sejam letras ou números
+}
+
 const WordGame = () => {
-  const { id } = useParams();
+  const { id, linguage } = useParams();
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [cleanTitle, setCleanTitle] = useState(""); // título limpo
   const [shuffledLetters, setShuffledLetters] = useState([]);
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [isComplete, setIsComplete] = useState(false);
@@ -42,10 +52,14 @@ const WordGame = () => {
     fetchProduct();
   }, [id]);
 
-  // Embaralhar letras quando o produto é carregado
+  // Quando o produto é carregado, limpar e embaralhar o título
   useEffect(() => {
     if (!product) return;
-    setShuffledLetters(shuffleArray(product.title.split("")));
+
+    const normalized = normalizeText(linguage == "pt" ? product.title : product.english);
+
+    setCleanTitle(normalized);
+    setShuffledLetters(shuffleArray(normalized.split("")));
     setSelectedLetters([]);
     setIsComplete(false);
     setIsCorrect(false);
@@ -70,18 +84,18 @@ const WordGame = () => {
 
   // Verificar palavra formada
   useEffect(() => {
-    if (!product) return;
-    if (selectedLetters.length === product.title.length) {
+    if (!cleanTitle) return;
+    if (selectedLetters.length === cleanTitle.length) {
       const wordFormed = selectedLetters.map((l) => l.letter).join("");
       setIsComplete(true);
-      setIsCorrect(wordFormed === product.title);
+      setIsCorrect(wordFormed === cleanTitle);
     } else {
       setIsComplete(false);
       setIsCorrect(false);
     }
-  }, [selectedLetters, product]);
+  }, [selectedLetters, cleanTitle]);
 
-  const onBack = () => navigate(-1); // Voltar para página anterior
+  const onBack = () => navigate(-1);
 
   return (
     <main className="flex flex-col p-3 m-auto w-full max-w-screen-xl md:p-4">
@@ -99,7 +113,7 @@ const WordGame = () => {
           Monte a Palavra
         </h1>
         <p className="text-xl font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-200">
-          Toque sobre a letra para formar a palavra.
+          Toque sobre as letras para formar a palavra correta.
         </p>
       </section>
 
@@ -110,6 +124,7 @@ const WordGame = () => {
         >
           <IoMdArrowRoundBack /> Voltar
         </button>
+
         {product && (
           <img
             src={product.image}
@@ -118,7 +133,7 @@ const WordGame = () => {
           />
         )}
 
-        <div className="mt-5 max-w-screen-sm px-2">
+        <div className="mt-5 max-w-screen-sm px-2 m-auto">
           <WordDisplay
             selectedLetters={selectedLetters}
             removeLetter={removeLetter}

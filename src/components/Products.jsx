@@ -1,42 +1,30 @@
 import { useEffect, useState } from "react";
-import api from "../axios/api";
 import { Link } from "react-router-dom";
 import { GiMusicalNotes, GiSpeaker } from "react-icons/gi";
 import { GrGamepad } from "react-icons/gr";
+import { toast } from "react-toastify";
+import { useProducts } from "../context/ProductsContext";
+import api from "../axios/api";
 
 const Products = ({ setWriteHistory, count, setIsReading }) => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { products, letters, loading, loadingLetters } = useProducts();
+
   const [creatingStory, setCreatingStory] = useState(false);
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await api.get(`/products`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setProducts(res.data.data);
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //const [isOpen, setIsOpen] = useState(false);
+  //const toggleMenu = () => setIsOpen((prev) => !prev);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  const handleUpdate = async () => {
+    clearProducts(); // limpa o cache
+    await fetchProducts(); // carrega os novos produtos
+  };
 
   const getHistory = () => {
     try {
       const data = localStorage.getItem("#MagicHistory");
       return data ? JSON.parse(data) : [];
     } catch (err) {
+      toast.info("Erro ao carregar histórias!");
       console.error("Erro ao carregar histórias do localStorage:", err);
       return [];
     }
@@ -47,19 +35,16 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
     setCreatingStory(true);
 
     try {
-      const history = getHistory();
+      const stories = getHistory();
 
-      const exists = history.find((item) => item.title === galery.title);
-      if (exists) {
+      if (stories.some((item) => item.title === galery.title)) {
         setCreatingStory(false);
         setWriteHistory(false);
         return;
       }
 
       if (count >= 5) {
-        alert(
-          "Limite de 5 histórias atingido. Exclua algumas histórias antigas para adicionar novas."
-        );
+        toast.info("Limite de 5 personagens por história atingido.");
         setCreatingStory(false);
         setWriteHistory(false);
         return;
@@ -77,7 +62,7 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
         description: res.data.story,
       };
 
-      const updatedHistory = [...history, newItem];
+      const updatedHistory = [...stories, newItem];
       localStorage.setItem("#MagicHistory", JSON.stringify(updatedHistory));
 
       window.dispatchEvent(new Event("localStorageUpdated"));
@@ -85,22 +70,18 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
       setIsReading(false);
     } catch (err) {
       console.error("Erro addToHistory: ", err);
-      alert("Erro ao gerar história mágica. Tente novamente.");
+      toast.error("Erro ao gerar história mágica. Tente novamente.");
     } finally {
       setCreatingStory(false);
       setWriteHistory(false);
     }
   };
 
-  const playSound = (clickSound) => {
-    const audio = new Audio(clickSound);
-    audio.play();
-  };
+  const playSound = (sound) => new Audio(sound).play();
 
-  // 🗣️ Função que lê o título do produto em voz alta
   const readTitle = (title) => {
     if (!window.speechSynthesis) {
-      alert("Seu navegador não suporta leitura de voz.");
+      toast.info("Seu navegador não suporta leitura de voz.");
       return;
     }
     window.speechSynthesis.cancel();
@@ -111,90 +92,92 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
     window.speechSynthesis.speak(utterance);
   };
 
-  // 🔤 Função que retorna "Ba" para "Barco"
   const getDuasLetras = (titulo) => {
     if (typeof titulo !== "string" || titulo.length === 0) return "";
-    const primeira = titulo.charAt(0).toUpperCase();
-    const segunda = titulo.charAt(0).toLowerCase();
-    return `${primeira} - ${segunda}`;
+    return `${titulo.charAt(0).toUpperCase()} - ${titulo
+      .charAt(0)
+      .toLowerCase()}`;
   };
 
-  if (loading) {
+  if (loading || loadingLetters)
     return (
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center text-amber-600 font-bold">
         Carregando Galeria...
       </div>
     );
-  }
 
-  if (creatingStory) {
-    return "Criando História...";
-  }
+  if (creatingStory) return "Criando imagens...";
 
   return (
-    <section className="flex max-w-screen-xl my-5">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-screen-xl w-full">
-        {products &&
-          products.map((item) => (
-            <div
-              key={item._id}
-              className="flex flex-col bg-yellow-100 items-center justify-center max-w-screen-ms w-full border-4 border-amber-200 p-4 shadow-amber-200 shadow-md rounded-lg hover:scale-105 transition-transform dark:bg-gray-800"
+    <main className="flex flex-col max-w-screen-xl my-5">
+      
+      {letters.length > 0 && (
+        <section className="grid grid-cols-5 md:grid-cols-10 gap-2 mb-4">
+          {letters.map((value) => (
+            <button
+              key={value._id}
+              onClick={() => readTitle(value.letter)}
+              className="border border-amber-600 p-2 rounded-md shadow-md text-xl text-amber-600 focus:bg-amber-600 focus:text-white"
+              style={{ fontFamily: "PlaywriteDESAS-Regular" }}
             >
-              {/* 🔤 Mostra as duas letras (ex: Ba) */}
-              <span className="font-normal text-amber-700 text-xl" style={{ fontFamily: "PlaywriteDESAS-Regular" }}>
-                {getDuasLetras(item.title)}
+              {value.letter}
+            </button>
+          ))}
+        </section>
+      )}
+
+      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-screen-xl w-full">
+        {products.map((item) => (
+          <article
+            key={item._id}
+            className="flex flex-col bg-yellow-100 items-center justify-center border-4 border-amber-200 p-4 shadow-md rounded-lg hover:scale-105 transition-transform dark:bg-gray-800"
+          >
+            <span
+              className="font-normal text-amber-700 text-xl"
+              style={{ fontFamily: "PlaywriteDESAS-Regular" }}
+            >
+              {getDuasLetras(item.title)}
+            </span>
+
+            <Link onClick={() => addToHistory(item)}>
+              <img
+                src={item.image}
+                alt={item.title}
+                className="mb-2 w-full object-cover rounded-md"
+              />
+            </Link>
+
+            <div className="flex flex-col w-full md:flex-row md:justify-between">
+              <span className="flex items-center gap-2 text-xl text-center font-bold text-amber-700 truncate mb-2 md:mb-0">
+                {item.sound && (
+                  <button
+                    onClick={() => playSound(item.sound)}
+                    title="Ouvir som"
+                  >
+                    <GiMusicalNotes className="w-5 h-5 text-amber-600" />
+                  </button>
+                )}
+
+                {item.title}
               </span>
 
-              <Link onClick={() => addToHistory(item)}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="mb-2 w-full object-cover rounded-md"
-                />
-              </Link>
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  onClick={() => readTitle(item.title)}
+                  title="Ouvir título"
+                >
+                  <GiSpeaker className="w-6 h-6 text-amber-600" />
+                </button>
 
-              <div className="flex flex-col w-full md:flex-row md:justify-between">
-                <span className="text-xl text-center font-bold text-amber-700 truncate mb-2 md:mb-0">
-                  {item.title}
-                </span>
-
-                <div className="flex items-center justify-between gap-1">
-                  {/* 🔊 Botão para ler o título */}
-                  <button
-                    onClick={() => readTitle(item.title)}
-                    title="Ouvir título"
-                    className="p-1 hover:scale-110 transition-transform"
-                  >
-                    <GiSpeaker className="w-6 h-6 text-amber-600" />
-                  </button>
-                  {/* 🎵 Se tiver som, mostra o botão musical */}
-                  {item.sound && (
-                    <button
-                      onClick={() => playSound(item.sound)}
-                      title="Ouvir som"
-                      className="p-1 hover:scale-110 transition-transform"
-                    >
-                      <GiMusicalNotes className="w-5 h-5 text-amber-600" />
-                    </button>
-                  )}
-                  
-                  {/* 🔊 Botão para ler o título */}
-                  <Link 
-                  to={`/wordgame/${item._id}`}
-                    className="p-1 hover:scale-110 transition-transform"
-                  >
-                    <GrGamepad className="w-6 h-6 text-amber-600" />
-                  </Link>
-                </div>
+                <Link to={`/wordgame/${item._id}/pt`}>
+                  <GrGamepad className="w-6 h-6 text-amber-600" />
+                </Link>
               </div>
-
-
-
-
             </div>
-          ))}
-      </div>
-    </section>
+          </article>
+        ))}
+      </section>
+    </main>
   );
 };
 

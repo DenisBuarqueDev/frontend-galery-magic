@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [loading, setLoading] = useState(true);
 
-  // 🔍 Verifica se o token e o usuário são válidos
+  //  Verifica se o token e o usuário são válidos
   useEffect(() => {
     const checkAuth = async () => {
       const userData = localStorage.getItem("user");
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, [token]);
 
-  // 🔐 Função de login
+  // Função de login
   const login = async (email, password) => {
     try {
       const res = await api.post("/auth/login", { email, password });
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🚪 Logout seguro (também usado para expiração de sessão)
+  // Logout seguro (também usado para expiração de sessão)
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
