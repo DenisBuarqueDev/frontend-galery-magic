@@ -106,7 +106,7 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
   return (
     <main className="flex flex-col max-w-screen-xl my-5">
       
-      {letters.length > 0 && (
+      {!letters && letters.length > 0 && (
         <section className="grid grid-cols-5 md:grid-cols-10 gap-2 mb-4">
           {letters.map((value) => (
             <button

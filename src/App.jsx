@@ -13,10 +13,12 @@ import Parents from "./pages/Parents";
 import Story from "./pages/Story";
 import WordGame from "./pages/WordGame";
 import WordMatchGame from "./pages/WordMatchGame";
+import Tosign from "./pages/Tosign";
+import WordGuees from "./pages/WordGuees";
 
 function App() {
   const location = useLocation();
-  const hiddenRoutes = ["/", "/assinatura"];
+  const hiddenRoutes = ["/", "/assinar"];
   const hideLayout = hiddenRoutes.includes(location.pathname);
 
   return (
@@ -79,6 +81,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <WordMatchGame />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/wordguees"
+            element={
+              <ProtectedRoute>
+                <WordGuees />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/assinar"
+            element={
+              <ProtectedRoute>
+                <Tosign />
               </ProtectedRoute>
             }
           />

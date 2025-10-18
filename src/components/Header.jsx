@@ -7,6 +7,7 @@ import { GiMusicalNotes } from "react-icons/gi";
 import { FaSignOutAlt } from "react-icons/fa";
 import { LiaFlagUsaSolid } from "react-icons/lia";
 import { LuCombine } from "react-icons/lu";
+import { TbPhotoQuestion } from "react-icons/tb";
 
 const Header = () => {
   const { logout } = useContext(AuthContext);
@@ -106,6 +107,14 @@ const Header = () => {
                 className="flex items-center py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
               >
                 <LuCombine className="mr-2 w-4 h-4" /> Combinar
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/wordguees"
+                className="flex items-center py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+              >
+                <TbPhotoQuestion className="mr-2 w-4 h-4" /> Adivinhe
               </Link>
             </li>
             {/*<li>
