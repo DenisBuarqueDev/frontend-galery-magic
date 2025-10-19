@@ -1,11 +1,9 @@
-// components/GoogleLoginBtn.jsx
 import React, { useEffect } from "react";
 import { FaGoogle } from "react-icons/fa";
 
 const GoogleLoginBtn = () => {
   const openPopup = () => {
-    const width = 600;
-    const height = 700;
+    const width = 600, height = 700;
     const left = window.screen.width / 2 - width / 2;
     const top = window.screen.height / 2 - height / 2;
 
@@ -18,21 +16,20 @@ const GoogleLoginBtn = () => {
 
   useEffect(() => {
     const handleMessage = (event) => {
-      // Verifica se a mensagem veio do backend correto
-      //if (event.origin !== "https://backend-galery-magic.onrender.com") return;
-
-      if (!['https://backend-galery-magic.onrender.com', 'http://localhost:5000'].includes(event.origin)) return;
+      const allowedOrigins = [
+        "https://backend-galery-magic.onrender.com",
+        "http://localhost:5000"
+      ];
+      if (!allowedOrigins.includes(event.origin)) return;
 
       const { token } = event.data;
       if (token) {
-        // Salva token e redireciona
         localStorage.setItem("token", token);
-        window.location.href = "/galery";
+        window.location.href = "/galery"; // redireciona após login
       }
     };
 
     window.addEventListener("message", handleMessage);
-
     return () => window.removeEventListener("message", handleMessage);
   }, []);
 
