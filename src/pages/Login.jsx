@@ -143,13 +143,6 @@ const Login = () => {
             )}
           </button>
 
-          {/*<button
-            type="button"
-            className="flex items-center justify-center w-full gap-2 px-5 py-2.5 mt-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600"
-          >
-            <FaGoogle /> Entrar com Google
-          </button>*/}
-
           <GoogleLoginBtn />
 
           <p className="text-sm font-medium text-center text-gray-500 dark:text-gray-300 mt-4">

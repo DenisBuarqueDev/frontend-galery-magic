@@ -15,6 +15,7 @@ import WordGame from "./pages/WordGame";
 import WordMatchGame from "./pages/WordMatchGame";
 import Tosign from "./pages/Tosign";
 import WordGuees from "./pages/WordGuees";
+import AuthSuccess from "./pages/AuthSuccess";
 
 function App() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function App() {
         {!hideLayout && <Header />}
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/auth-success" element={<AuthSuccess />} />
           <Route
             path="/galery"
             element={
