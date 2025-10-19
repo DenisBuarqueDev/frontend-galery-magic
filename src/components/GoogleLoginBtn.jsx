@@ -19,7 +19,9 @@ const GoogleLoginBtn = () => {
   useEffect(() => {
     const handleMessage = (event) => {
       // Verifica se a mensagem veio do backend correto
-      if (event.origin !== "https://backend-galery-magic.onrender.com") return;
+      //if (event.origin !== "https://backend-galery-magic.onrender.com") return;
+
+      if (!['https://backend-galery-magic.onrender.com', 'http://localhost:5000'].includes(event.origin)) return;
 
       const { token } = event.data;
       if (token) {
