@@ -7,13 +7,6 @@ import { LiaFlagUsaSolid } from "react-icons/lia";
 import { IoIosSave } from "react-icons/io";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionPanel,
-  AccordionTitle,
-} from "flowbite-react";
-
 const LandingPage = () => {
   return (
     <main className="flex flex-col max-w-screen-xl m-auto">

@@ -163,7 +163,6 @@ const WordGame = () => {
         {isComplete && <Feedback isCorrect={isCorrect} />}
       </section>
 
-      <div className="w-full h-6"></div>
     </main>
   );
 };

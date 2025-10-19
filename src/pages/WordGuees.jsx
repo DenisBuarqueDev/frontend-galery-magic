@@ -66,19 +66,19 @@ const WordGuees = () => {
         subtitle="Toque na palavra certa!"
       />
 
-      <div className="mt-6 flex flex-col items-center gap-4">
+      <div className="mt-6 flex flex-col items-center gap-4 max-w-screen-sm w-full px-4">
         <img
           src={currentProduct.image}
           alt={currentProduct.title}
-          className="w-48 h-48 object-contain rounded-2xl shadow-md border-4 border-yellow-300 bg-white"
+          className="w-48 h-48 object-contain"
         />
 
-        <div className="grid grid-cols-1 gap-3 mt-6">
+        <div className="grid grid-cols-1 gap-3 mt-6 w-full">
           {options.map((option) => (
             <button
               key={option}
               onClick={() => handleAnswer(option)}
-              className="bg-white text-lg md:text-xl font-semibold py-2 px-4 rounded-xl shadow hover:bg-yellow-100 transition-all border-2 border-transparent hover:border-yellow-400"
+              className="bg-white text-2xl w-full py-2 px-4 rounded-xl shadow hover:bg-yellow-100 transition-all border-2 border-transparent hover:border-yellow-400"
             >
               {option}
             </button>

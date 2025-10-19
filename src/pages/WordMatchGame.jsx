@@ -150,7 +150,7 @@ const WordMatchGame = () => {
                   key={card.id}
                   onClick={() => handleSelect(card)}
                   disabled={isMatched || resetting}
-                  className={`p-3 rounded-xl shadow-md text-center font-semibold transition-all duration-300 transform
+                  className={`p-3 rounded-xl shadow-md text-center text-2xl transition-all duration-300 transform
                     ${
                       isMatched
                         ? "bg-amber-700 text-white"
@@ -177,7 +177,7 @@ const WordMatchGame = () => {
                   key={card.id}
                   onClick={() => handleSelect(card)}
                   disabled={isMatched || resetting}
-                  className={`p-3 rounded-xl shadow-md text-center font-semibold transition-all duration-300 transform
+                  className={`p-3 rounded-xl shadow-md text-center text-2xl transition-all duration-300 transform
                     ${
                       isMatched
                         ? "bg-amber-700 text-white"
