@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       api.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
 
-      navigate("/dashboard");
+      navigate("/galery");
     } catch (error) {
       console.error("Erro no login:", error);
       throw new Error(
