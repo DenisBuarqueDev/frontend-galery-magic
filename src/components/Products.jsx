@@ -91,7 +91,7 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
       .toLowerCase()}`;
   };
 
-  if (loading || loadingLetters)
+  if (loading)
     return (
       <div className="flex items-center justify-center text-amber-600 font-bold">
         Carregando Galeria...
