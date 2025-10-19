@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle, FaKey } from "react-icons/fa";
 import { BiSolidMessageError } from "react-icons/bi";
 import { FaWandMagicSparkles } from "react-icons/fa6";
+import GoogleLoginBtn from "../components/GoogleLoginBtn";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -137,17 +138,19 @@ const Login = () => {
             ) : (
               <>
               <FaKey />
-              Entrar
+              Entrar com e-Mail
               </>
             )}
           </button>
 
-          <button
+          {/*<button
             type="button"
             className="flex items-center justify-center w-full gap-2 px-5 py-2.5 mt-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600"
           >
             <FaGoogle /> Entrar com Google
-          </button>
+          </button>*/}
+
+          <GoogleLoginBtn />
 
           <p className="text-sm font-medium text-center text-gray-500 dark:text-gray-300 mt-4">
             Não tem cadastro?{" "}

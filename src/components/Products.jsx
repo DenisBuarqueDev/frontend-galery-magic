@@ -7,12 +7,9 @@ import { useProducts } from "../context/ProductsContext";
 import api from "../axios/api";
 
 const Products = ({ setWriteHistory, count, setIsReading }) => {
-  const { products, letters, loading, loadingLetters } = useProducts();
+  const { products, loading } = useProducts();
 
   const [creatingStory, setCreatingStory] = useState(false);
-
-  //const [isOpen, setIsOpen] = useState(false);
-  //const toggleMenu = () => setIsOpen((prev) => !prev);
 
   const getHistory = () => {
     try {
@@ -105,22 +102,7 @@ const Products = ({ setWriteHistory, count, setIsReading }) => {
 
   return (
     <main className="flex flex-col max-w-screen-xl my-5">
-      
-      {!letters && letters.length > 0 && (
-        <section className="grid grid-cols-5 md:grid-cols-10 gap-2 mb-4">
-          {letters.map((value) => (
-            <button
-              key={value._id}
-              onClick={() => readTitle(value.letter)}
-              className="border border-amber-600 p-2 rounded-md shadow-md text-xl text-amber-600 focus:bg-amber-600 focus:text-white"
-              style={{ fontFamily: "PlaywriteDESAS-Regular" }}
-            >
-              {value.letter}
-            </button>
-          ))}
-        </section>
-      )}
-
+  
       <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-screen-xl w-full">
         {products.map((item) => (
           <article
