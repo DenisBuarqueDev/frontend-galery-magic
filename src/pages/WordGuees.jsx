@@ -73,7 +73,7 @@ const WordGuees = () => {
           className="w-48 h-48 object-contain rounded-2xl shadow-md border-4 border-yellow-300 bg-white"
         />
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-6">
+        <div className="grid grid-cols-1 gap-3 mt-6">
           {options.map((option) => (
             <button
               key={option}

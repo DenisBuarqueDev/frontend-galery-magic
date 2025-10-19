@@ -1,10 +1,6 @@
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/*@import 'flowbite';*/
 
 body {
   background-color: beige; /* cor de fundo */

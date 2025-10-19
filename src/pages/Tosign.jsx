@@ -617,85 +617,39 @@ const LandingPage = () => {
         </div>
 
         <div className="max-w-screen-md mx-auto p-10 dark:bg-gray-800">
-          <Accordion
-            collapseAll
-            className="bg-amber-100 border-4 border-amber-200"
-          >
-            <AccordionPanel>
-              <AccordionTitle className="text-amber-700">
-                Para qual faixa etária é recomendado?
-              </AccordionTitle>
-              <AccordionContent>
-                <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  Histórias Mágicas IA é perfeito para crianças de 4 a 8 anos,
+
+
+
+
+          <ul>
+            <li className="text-bold">Para qual faixa etária é recomendado?</li>
+            <li>Histórias Mágicas IA é perfeito para crianças de 4 a 8 anos,
                   com conteúdo adaptado automaticamente à idade para máxima
-                  engajamento e segurança.
-                </p>
-              </AccordionContent>
-            </AccordionPanel>
+                  engajamento e segurança.</li>
 
-            <AccordionPanel>
-              <AccordionTitle className="text-amber-700">
-                Como funciona o aprendizado bilíngue?
-              </AccordionTitle>
-              <AccordionContent>
-                <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  As crianças ouvem palavras e histórias em português e inglês,
+            <li className="text-bold">Como funciona o aprendizado bilíngue?</li>
+            <li>As crianças ouvem palavras e histórias em português e inglês,
                   jogam combinando as traduções e absorvem naturalmente ambos os
-                  idiomas.
-                </p>
-              </AccordionContent>
-            </AccordionPanel>
+                  idiomas.</li>
 
-            <AccordionPanel>
-              <AccordionTitle className="text-amber-700">
-                É seguro para crianças?
-              </AccordionTitle>
-              <AccordionContent>
-                <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  Sim! Todo conteúdo é gerado com filtros de segurança, sem
-                  anúncios e adequado para crianças. Certificado por pedagogos.
-                </p>
-              </AccordionContent>
-            </AccordionPanel>
+            <li className="text-bold">É seguro para crianças?</li>
+            <li>Sim! Todo conteúdo é gerado com filtros de segurança, sem
+                  anúncios e adequado para crianças. Certificado por pedagogos.</li>
 
-            <AccordionPanel>
-              <AccordionTitle className="text-amber-700">
-                Posso usar em múltiplos dispositivos?
-              </AccordionTitle>
-              <AccordionContent>
-                <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  Sim! Sua assinatura funciona em até 3 dispositivos
+            <li className="text-bold">Posso usar em múltiplos dispositivos?</li>
+            <li>Sim! Sua assinatura funciona em até 3 dispositivos
                   simultaneamente. Perfeito para famílias com mais de uma
-                  criança.
-                </p>
-              </AccordionContent>
-            </AccordionPanel>
+                  criança.</li>
 
-            <AccordionPanel>
-              <AccordionTitle className="text-amber-700">
-                Como cancelo minha assinatura?
-              </AccordionTitle>
-              <AccordionContent>
-                <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  Você pode cancelar a qualquer momento com apenas um clique na
-                  área de configurações. Sem taxas ou burocracia.
-                </p>
-              </AccordionContent>
-            </AccordionPanel>
+            <li className="text-bold">Como cancelo minha assinatura?</li>
+            <li>Você pode cancelar a qualquer momento com apenas um clique na
+                  área de configurações. Sem taxas ou burocracia.</li>
 
-            <AccordionPanel>
-              <AccordionTitle className="text-amber-700">
-                Existe versão offline?
-              </AccordionTitle>
-              <AccordionContent>
-                <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  No plano Premium, você pode baixar histórias para ouvir
-                  offline. Perfeito para viagens!
-                </p>
-              </AccordionContent>
-            </AccordionPanel>
-          </Accordion>
+            <li className="text-bold">Existe versão offline?</li>
+            <li>No plano Premium, você pode baixar histórias para ouvir
+                  offline. Perfeito para viagens!</li>
+          </ul>
+
         </div>
       </section>
 
