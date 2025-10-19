@@ -1,22 +1,23 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import api from "../axios/api";
 import { toast } from "react-toastify";
+import { AuthContext } from "./AuthContext"; // Importa contexto de autenticação
 
 const ProductsContext = createContext();
 
 export const ProductsProvider = ({ children }) => {
+  const { token } = useContext(AuthContext); // Pega token do AuthContext
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Faz o fetch apenas uma vez (cache global)
   const fetchProducts = async () => {
     if (products.length > 0) return; // Evita recarregar
+    if (!token) return; // Não busca produtos se usuário não estiver logado
+
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await api.get(`/products`, {
+      const res = await api.get("/products", {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
@@ -29,10 +30,10 @@ export const ProductsProvider = ({ children }) => {
     }
   };
 
-  // Executa apenas uma vez no app inteiro
+  // Executa quando o token mudar
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [token]); // <- se o token mudar (login/logout), refaz o fetch
 
   return (
     <ProductsContext.Provider
