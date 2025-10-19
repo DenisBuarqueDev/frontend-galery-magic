@@ -10,7 +10,7 @@ const GoogleLoginBtn = () => {
     const top = (window.screen.height / 2) - (height / 2);
 
     window.open(
-      `${process.env.REACT_APP_API_URL}/auth/google`,
+      `https://backend-galery-magic.onrender.com/api/auth/google`,
       'google-login',
       `width=${width},height=${height},top=${top},left=${left}`
     );
