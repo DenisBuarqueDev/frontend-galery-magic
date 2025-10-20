@@ -15,7 +15,8 @@ import WordGame from "./pages/WordGame";
 import WordMatchGame from "./pages/WordMatchGame";
 import Tosign from "./pages/Tosign";
 import WordGuees from "./pages/WordGuees";
-import AuthSuccess from "./pages/AuthSuccess";
+import ColoringImages from "./pages/ColoringImages";
+import Color from "./pages/Color";
 
 function App() {
   const location = useLocation();
@@ -29,7 +30,6 @@ function App() {
         {!hideLayout && <Header />}
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/auth-success" element={<AuthSuccess />} />
           <Route
             path="/galery"
             element={
@@ -95,6 +95,22 @@ function App() {
             }
           />
           <Route
+            path="/coloring"
+            element={
+              <ProtectedRoute>
+                <ColoringImages />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/color/:id"
+            element={
+              <ProtectedRoute>
+                <Color />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/assinar"
             element={
               <ProtectedRoute>
@@ -103,7 +119,6 @@ function App() {
             }
           />
         </Routes>
-        
       </ProductsProvider>
     </AuthProvider>
   );

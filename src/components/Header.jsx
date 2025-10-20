@@ -8,6 +8,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { LiaFlagUsaSolid } from "react-icons/lia";
 import { LuCombine } from "react-icons/lu";
 import { TbPhotoQuestion } from "react-icons/tb";
+import { IoMdColorPalette } from "react-icons/io";
 
 const Header = () => {
   const { logout } = useContext(AuthContext);
@@ -115,6 +116,14 @@ const Header = () => {
                 className="flex items-center py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
               >
                 <TbPhotoQuestion className="mr-2 w-4 h-4" /> Adivinhe
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/coloring"
+                className="flex items-center py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+              >
+                <IoMdColorPalette className="mr-2 w-5 h-5" /> Colorindo
               </Link>
             </li>
             {/*<li>

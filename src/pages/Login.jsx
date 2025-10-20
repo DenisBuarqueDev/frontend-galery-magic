@@ -143,15 +143,13 @@ const Login = () => {
             )}
           </button>
 
-          <GoogleLoginBtn />
-
           <p className="text-sm font-medium text-center text-gray-500 dark:text-gray-300 mt-4">
             Não tem cadastro?{" "}
             <Link
-              to="/"
+              to="/assinar"
               className="text-blue-700 hover:underline dark:text-blue-500"
             >
-              Criar conta
+              Assinar Plano
             </Link>
           </p>
         </form>
