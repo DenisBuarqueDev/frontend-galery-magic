@@ -2,39 +2,42 @@
 import React, { useRef, useEffect, useState } from "react";
 
 const colors = [
-  "#FF0000",
-  "#00FF00",
-  "#0000FF",
-  "#FFFF00",
-  "#FF00FF",
-  "#00FFFF",
-  "#FFA500",
-  "#800080",
-  "#A52A2A",
-  "#FFFFFF",
   "#000000",
-  "#FFC0CB",
-  "#808080",
-  "#FFD700",
-  "#00FA9A",
-  "#8B4513",
-  "#4682B4",
-  "#FF69B4",
-  "#4B0082",
+  "#4F4F4F",
+  "#DCDCDC",
+  "#00008B",
+  "#0000FF",
+  "#00BFFF",
+  "#87CEEB",
+  "#008000",
+  "#32CD32",
   "#7FFF00",
-  "#00CED1",
-  "#FF4500",
-  "#DA70D6",
-  "#F0E68C",
+  "#808000",
+  "#BDB76B",
+  "#FFDEAD",
+  "#8B008B",
+  "#FF00FF",
+  "#FF69B4",
+  "#FF0000",
+  "#FF8C00",
+  "#FFD700",
+  "#FFFF00",
+  "#D2691E",
+  "#E0FFFF",
+  "#EEE8AA",
+  "#FFFFFF",
 ];
 
 const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
   const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
   const [selectedColor, setSelectedColor] = useState("#FF0000");
 
+  // 🔹 Cria o contexto uma única vez
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctxRef.current = ctx;
 
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -46,75 +49,115 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
     };
   }, [svgUrl]);
 
+  // 🔹 Conversão de cor HEX → RGBA
+  const hexToRgba = (hex) => {
+    const parsed = hex.replace("#", "");
+    return [
+      parseInt(parsed.substring(0, 2), 16),
+      parseInt(parsed.substring(2, 4), 16),
+      parseInt(parsed.substring(4, 6), 16),
+      255,
+    ];
+  };
+
+  // 🔹 Flood fill otimizado (faixa horizontal)
   const handleCanvasClick = (e) => {
     const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    if (!ctx) return;
+
     const rect = canvas.getBoundingClientRect();
     const x = Math.floor(((e.clientX - rect.left) / rect.width) * canvas.width);
     const y = Math.floor(
       ((e.clientY - rect.top) / rect.height) * canvas.height
     );
 
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
 
-    // Função de Flood Fill
-    const stack = [];
-    const startPos = (y * canvas.width + x) * 4;
-    const startColor = [
-      data[startPos],
-      data[startPos + 1],
-      data[startPos + 2],
-      data[startPos + 3],
-    ];
+    const targetColor = getPixel(data, x, y, canvas.width);
+    const fillColor = hexToRgba(selectedColor);
 
-    const hex = selectedColor.replace("#", "");
-    const fillColor = [
-      parseInt(hex.substring(0, 2), 16),
-      parseInt(hex.substring(2, 4), 16),
-      parseInt(hex.substring(4, 6), 16),
-      255,
-    ];
+    if (colorsMatch(targetColor, fillColor)) return;
 
-    const matchColor = (pos) =>
-      data[pos] === startColor[0] &&
-      data[pos + 1] === startColor[1] &&
-      data[pos + 2] === startColor[2] &&
-      data[pos + 3] === startColor[3];
-
-    const setColor = (pos) => {
-      data[pos] = fillColor[0];
-      data[pos + 1] = fillColor[1];
-      data[pos + 2] = fillColor[2];
-      data[pos + 3] = fillColor[3];
-    };
-
-    stack.push([x, y]);
+    const stack = [[x, y]];
     while (stack.length) {
       const [cx, cy] = stack.pop();
-      const pos = (cy * canvas.width + cx) * 4;
-      if (!matchColor(pos)) continue;
-      setColor(pos);
+      let nx = cx;
 
-      if (cx + 1 < canvas.width) stack.push([cx + 1, cy]);
-      if (cx - 1 >= 0) stack.push([cx - 1, cy]);
-      if (cy + 1 < canvas.height) stack.push([cx, cy + 1]);
-      if (cy - 1 >= 0) stack.push([cx, cy - 1]);
+      // Move para a esquerda
+      while (
+        nx >= 0 &&
+        colorsMatch(getPixel(data, nx, cy, canvas.width), targetColor)
+      )
+        nx--;
+      nx++;
+
+      let spanAbove = false;
+      let spanBelow = false;
+
+      // Preenche a faixa horizontal
+      while (
+        nx < canvas.width &&
+        colorsMatch(getPixel(data, nx, cy, canvas.width), targetColor)
+      ) {
+        setPixel(data, nx, cy, canvas.width, fillColor);
+
+        if (cy > 0) {
+          if (
+            colorsMatch(getPixel(data, nx, cy - 1, canvas.width), targetColor)
+          ) {
+            if (!spanAbove) {
+              stack.push([nx, cy - 1]);
+              spanAbove = true;
+            }
+          } else spanAbove = false;
+        }
+
+        if (cy < canvas.height - 1) {
+          if (
+            colorsMatch(getPixel(data, nx, cy + 1, canvas.width), targetColor)
+          ) {
+            if (!spanBelow) {
+              stack.push([nx, cy + 1]);
+              spanBelow = true;
+            }
+          } else spanBelow = false;
+        }
+        nx++;
+      }
     }
 
     ctx.putImageData(imageData, 0, 0);
   };
 
+  // 🧩 Helpers
+  const getPixel = (data, x, y, width) => {
+    const i = (y * width + x) * 4;
+    return [data[i], data[i + 1], data[i + 2], data[i + 3]];
+  };
+
+  const setPixel = (data, x, y, width, color) => {
+    const i = (y * width + x) * 4;
+    data[i] = color[0];
+    data[i + 1] = color[1];
+    data[i + 2] = color[2];
+    data[i + 3] = color[3];
+  };
+
+  const colorsMatch = (a, b) =>
+    a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
+
   return (
     <div>
-      <div className="flex flex-wrap max-w-screen-md m-auto p-4 w-full">
+      <div className="grid grid-cols-8 max-w-sm m-auto w-full">
         {colors.map((color) => (
           <button
             key={color}
             style={{
               backgroundColor: color,
-              width: 30,
-              height: 30,
+              width: 40,
+              height: 40,
               margin: 2,
               border:
                 selectedColor === color ? "2px solid black" : "1px solid #ccc",
@@ -125,12 +168,13 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
           />
         ))}
       </div>
+
       <canvas
         ref={canvasRef}
         width={width}
         height={height}
-        onClick={handleCanvasClick} 
-        className="cursor-crosshair m-auto bg-white mt-5"
+        onClick={handleCanvasClick}
+        className="cursor-crosshair m-auto bg-white mt-5 flex max-w-sm w-full p-2"
       />
     </div>
   );

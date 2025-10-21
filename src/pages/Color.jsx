@@ -25,15 +25,15 @@ const Color = () => {
   if (!image) return <p>Carregando...</p>;
 
   return (
-    <div className="p-6 dark:bg-gray-900">
-      <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-4">
-        Colorir: {image.title}
+    <main className="flex flex-col p-2 m-auto w-full max-w-screen-xl md:p-4">
+      <h1 className="text-4xl font-semibold text-center text-amber-600 dark:text-white mb-4">
+        {image.title}
       </h1>
 
-      <div className="flex justify-center flex-wrap gap-2 mb-4">
-        <ColoringCanvas svgUrl={image.image} width={600} height={600} />
+      <div className="flex justify-center mb-4">
+        <ColoringCanvas svgUrl={image.image} />
       </div>
-    </div>
+    </main>
   );
 };
 
