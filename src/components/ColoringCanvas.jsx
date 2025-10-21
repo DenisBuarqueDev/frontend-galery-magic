@@ -2,11 +2,11 @@
 import React, { useRef, useEffect, useState } from "react";
 
 const colors = [
-  "#000000",
   "#4F4F4F",
   "#DCDCDC",
   "#00008B",
   "#0000FF",
+  "#00CCFF",
   "#00BFFF",
   "#87CEEB",
   "#008000",
@@ -32,8 +32,9 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const [selectedColor, setSelectedColor] = useState("#FF0000");
+  const [history, setHistory] = useState([]); // 🆕 pilha de estados anteriores
 
-  // 🔹 Cria o contexto uma única vez
+  // 🔹 Inicializa o canvas e desenha o SVG
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -44,12 +45,13 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
     img.src = svgUrl;
 
     img.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
   }, [svgUrl]);
 
-  // 🔹 Conversão de cor HEX → RGBA
+  // 🔹 Conversão HEX → RGBA
   const hexToRgba = (hex) => {
     const parsed = hex.replace("#", "");
     return [
@@ -60,21 +62,25 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
     ];
   };
 
-  // 🔹 Flood fill otimizado (faixa horizontal)
+  // 🔹 Flood fill otimizado
   const handleCanvasClick = (e) => {
     const canvas = canvasRef.current;
     const ctx = ctxRef.current;
     if (!ctx) return;
 
+    // 🆕 Salva o estado anterior antes de pintar
+    const previousState = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    setHistory((prev) => {
+      const updated = [...prev, previousState];
+      return updated.length > 10 ? updated.slice(1) : updated; // máximo 10 passos
+    });
+
     const rect = canvas.getBoundingClientRect();
     const x = Math.floor(((e.clientX - rect.left) / rect.width) * canvas.width);
-    const y = Math.floor(
-      ((e.clientY - rect.top) / rect.height) * canvas.height
-    );
+    const y = Math.floor(((e.clientY - rect.top) / rect.height) * canvas.height);
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
-
     const targetColor = getPixel(data, x, y, canvas.width);
     const fillColor = hexToRgba(selectedColor);
 
@@ -85,7 +91,6 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
       const [cx, cy] = stack.pop();
       let nx = cx;
 
-      // Move para a esquerda
       while (
         nx >= 0 &&
         colorsMatch(getPixel(data, nx, cy, canvas.width), targetColor)
@@ -96,7 +101,6 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
       let spanAbove = false;
       let spanBelow = false;
 
-      // Preenche a faixa horizontal
       while (
         nx < canvas.width &&
         colorsMatch(getPixel(data, nx, cy, canvas.width), targetColor)
@@ -104,9 +108,7 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
         setPixel(data, nx, cy, canvas.width, fillColor);
 
         if (cy > 0) {
-          if (
-            colorsMatch(getPixel(data, nx, cy - 1, canvas.width), targetColor)
-          ) {
+          if (colorsMatch(getPixel(data, nx, cy - 1, canvas.width), targetColor)) {
             if (!spanAbove) {
               stack.push([nx, cy - 1]);
               spanAbove = true;
@@ -115,9 +117,7 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
         }
 
         if (cy < canvas.height - 1) {
-          if (
-            colorsMatch(getPixel(data, nx, cy + 1, canvas.width), targetColor)
-          ) {
+          if (colorsMatch(getPixel(data, nx, cy + 1, canvas.width), targetColor)) {
             if (!spanBelow) {
               stack.push([nx, cy + 1]);
               spanBelow = true;
@@ -145,11 +145,23 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
     data[i + 3] = color[3];
   };
 
-  const colorsMatch = (a, b) =>
-    a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
+  const colorsMatch = (a, b, tolerance = 25) =>
+    Math.abs(a[0] - b[0]) <= tolerance &&
+    Math.abs(a[1] - b[1]) <= tolerance &&
+    Math.abs(a[2] - b[2]) <= tolerance;
+
+  // 🆕 Botão “Voltar preenchimento”
+  const handleUndo = () => {
+    if (history.length === 0) return;
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    const lastState = history[history.length - 1];
+    ctx.putImageData(lastState, 0, 0);
+    setHistory((prev) => prev.slice(0, -1)); // remove o último estado
+  };
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <div className="grid grid-cols-8 max-w-sm m-auto w-full">
         {colors.map((color) => (
           <button
@@ -169,12 +181,21 @@ const ColoringCanvas = ({ svgUrl, width = 600, height = 600 }) => {
         ))}
       </div>
 
+      {/* 🆕 Botão de voltar preenchimento */}
+      <button
+        onClick={handleUndo}
+        disabled={history.length === 0}
+        className="mt-4 px-4 py-2 bg-yellow-400 text-black rounded-lg font-semibold shadow hover:bg-yellow-500 disabled:opacity-50"
+      >
+        Voltar preenchimento
+      </button>
+
       <canvas
         ref={canvasRef}
         width={width}
         height={height}
         onClick={handleCanvasClick}
-        className="cursor-crosshair m-auto bg-white mt-5 flex max-w-sm w-full p-2"
+        className="cursor-crosshair m-auto bg-white mt-5 flex max-w-sm w-full p-2 rounded-lg shadow"
       />
     </div>
   );
