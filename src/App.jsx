@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ProductsProvider } from "./context/ProductsContext"; // 👈 import do novo Context
+import { ColoringImagesProvider } from "./context/ColoringImagesContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import Header from "./components/Header";
@@ -27,98 +28,100 @@ function App() {
     <AuthProvider>
       {/* 👇 Envolvemos toda a aplicação com ProductsProvider */}
       <ProductsProvider>
-        {!hideLayout && <Header />}
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route
-            path="/galery"
-            element={
-              <ProtectedRoute>
-                <Gallery />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/perfil"
-            element={
-              <ProtectedRoute>
-                <Perfil />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/parents"
-            element={
-              <ProtectedRoute>
-                <Parents />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/story"
-            element={
-              <ProtectedRoute>
-                <Story />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/english"
-            element={
-              <ProtectedRoute>
-                <English />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/wordgame/:id/:linguage"
-            element={
-              <ProtectedRoute>
-                <WordGame />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/wordcombine"
-            element={
-              <ProtectedRoute>
-                <WordMatchGame />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/wordguees"
-            element={
-              <ProtectedRoute>
-                <WordGuees />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/coloring"
-            element={
-              <ProtectedRoute>
-                <ColoringImages />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/color/:id"
-            element={
-              <ProtectedRoute>
-                <Color />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/assinar"
-            element={
-              <ProtectedRoute>
-                <Tosign />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+        <ColoringImagesProvider>
+          {!hideLayout && <Header />}
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route
+              path="/galery"
+              element={
+                <ProtectedRoute>
+                  <Gallery />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/perfil"
+              element={
+                <ProtectedRoute>
+                  <Perfil />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/parents"
+              element={
+                <ProtectedRoute>
+                  <Parents />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/story"
+              element={
+                <ProtectedRoute>
+                  <Story />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/english"
+              element={
+                <ProtectedRoute>
+                  <English />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wordgame/:id/:linguage"
+              element={
+                <ProtectedRoute>
+                  <WordGame />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wordcombine"
+              element={
+                <ProtectedRoute>
+                  <WordMatchGame />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wordguees"
+              element={
+                <ProtectedRoute>
+                  <WordGuees />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/coloring"
+              element={
+                <ProtectedRoute>
+                  <ColoringImages />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/color/:id"
+              element={
+                <ProtectedRoute>
+                  <Color />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/assinar"
+              element={
+                <ProtectedRoute>
+                  <Tosign />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </ColoringImagesProvider>
       </ProductsProvider>
     </AuthProvider>
   );

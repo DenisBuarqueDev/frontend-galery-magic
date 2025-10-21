@@ -3,13 +3,19 @@ import { useNavigate } from "react-router-dom";
 import api from "../axios/api"; // sua instância axios já configurada
 import { toast } from "react-toastify";
 import TopOfPage from "../components/TopOfPage";
+import { useColoringImages } from "../context/ColoringImagesContext";
 
 const ColoringImages = () => {
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  //const [images, setImages] = useState([]);
+  const { images, loading, fetchColoringImages } = useColoringImages();
+  //const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetchColoringImages();
+  }, []);
+
+  /*useEffect(() => {
     const fetchImages = async () => {
       try {
         const res = await api.get("/coloring"); // rota do backend
@@ -23,7 +29,7 @@ const ColoringImages = () => {
     };
 
     fetchImages();
-  }, []);
+  }, []);*/
 
   const handleSelectImage = (id) => {
     navigate(`/color/${id}`);

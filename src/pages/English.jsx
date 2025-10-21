@@ -15,7 +15,7 @@ import TopOfPage from "../components/TopOfPage";
 const English = () => {
   const { user } = useContext(AuthContext);
 
-  const { products, letters, loading, loadingLetters } = useProducts();
+  const { products, loading, loadingLetters } = useProducts();
 
   const [creatingStory, setCreatingStory] = useState(false);
 
