@@ -19,6 +19,10 @@ import WordGuees from "./pages/WordGuees";
 import ColoringImages from "./pages/ColoringImages";
 import Color from "./pages/Color";
 
+import Success from "./pages/Success";
+import Failure from "./pages/Failure";
+import Pending from "./pages/Pending";
+
 function App() {
   const location = useLocation();
   const hiddenRoutes = ["/", "/assinar"];
@@ -115,8 +119,30 @@ function App() {
             <Route
               path="/assinar"
               element={
-                <ProtectedRoute>
                   <Tosign />
+              }
+            />
+            <Route
+              path="/success"
+              element={
+                <ProtectedRoute>
+                  <Success />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/failured"
+              element={
+                <ProtectedRoute>
+                  <Failure />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pending"
+              element={
+                <ProtectedRoute>
+                  <Pending />
                 </ProtectedRoute>
               }
             />

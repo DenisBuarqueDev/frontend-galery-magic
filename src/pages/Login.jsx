@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle, FaKey } from "react-icons/fa";
 import { BiSolidMessageError } from "react-icons/bi";
 import { FaWandMagicSparkles } from "react-icons/fa6";
-import GoogleLoginBtn from "../components/GoogleLoginBtn";
+import BtnMercadoPago from "../components/BtnMercadoPago";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -153,6 +153,7 @@ const Login = () => {
             </Link>
           </p>
         </form>
+
       </div>
     </main>
   );
