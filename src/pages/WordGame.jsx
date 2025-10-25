@@ -56,7 +56,9 @@ const WordGame = () => {
   useEffect(() => {
     if (!product) return;
 
-    const normalized = normalizeText(linguage == "pt" ? product.title : product.english);
+    const normalized = normalizeText(
+      linguage == "pt" ? product.title : product.english
+    );
 
     setCleanTitle(normalized);
     setShuffledLetters(shuffleArray(normalized.split("")));
@@ -110,30 +112,25 @@ const WordGame = () => {
 
       <section className="p-2 mx-auto max-w-screen-xl text-center mb-6">
         <h1 className="text-5xl bg-gradient-to-r from-yellow-700 to-amber-500 text-transparent bg-clip-text font-extrabold tracking-tight">
-          Monte a Palavra
+          Game
         </h1>
         <p className="text-xl font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-200">
-          Toque sobre as letras para formar a palavra correta.
+          Forme a palavra correta.
         </p>
       </section>
 
       <section style={{ textAlign: "center" }}>
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-white m-auto mb-4 px-4 py-2 bg-amber-600 rounded-full hover:bg-gray-400"
-        >
-          <IoMdArrowRoundBack /> Voltar
-        </button>
+        {isComplete && <Feedback isCorrect={isCorrect} />}
 
         {product && (
           <img
             src={product.image}
             alt={product.title}
-            style={{ width: "250px", margin: "auto" }}
+            style={{ width: "200px", margin: "auto" }}
           />
         )}
 
-        <div className="mt-5 max-w-screen-sm px-2 m-auto">
+        <div className="max-w-screen-sm px-2 m-auto mb-3">
           <WordDisplay
             selectedLetters={selectedLetters}
             removeLetter={removeLetter}
@@ -142,7 +139,6 @@ const WordGame = () => {
 
         <div
           style={{
-            marginTop: "20px",
             display: "flex",
             gap: "10px",
             flexWrap: "wrap",
@@ -160,9 +156,13 @@ const WordGame = () => {
           )}
         </div>
 
-        {isComplete && <Feedback isCorrect={isCorrect} />}
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-white m-auto mt-10 px-4 py-2 bg-amber-600 rounded-full hover:bg-gray-400"
+        >
+          <IoMdArrowRoundBack /> Voltar
+        </button>
       </section>
-
     </main>
   );
 };

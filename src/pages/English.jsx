@@ -62,16 +62,13 @@ const English = () => {
         </div>
       )}
 
-      <TopOfPage
-        title="Word English"
-        subtitle="Aprenda brincando!"
-      />
+      <TopOfPage title="Word English" subtitle="Aprenda brincando!" />
 
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-screen-xl w-full">
+      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 max-w-screen-xl w-full">
         {products.map((item) => (
           <article
             key={item._id}
-            className="flex flex-col bg-yellow-100 items-center justify-center border-4 border-amber-200 p-4 shadow-md rounded-lg hover:scale-105 transition-transform dark:bg-gray-800"
+            className="flex flex-col bg-yellow-100 items-center justify-center border-4 border-amber-200 p-2 shadow-md rounded-lg hover:scale-105 transition-transform dark:bg-gray-800"
           >
             <span
               className="font-normal text-amber-700 text-xl"
@@ -86,18 +83,9 @@ const English = () => {
               className="mb-2 w-full object-cover rounded-md"
             />
 
-            <div className="flex flex-col w-full md:flex-row md:justify-between">
+            <div className="flex flex-col w-full md:justify-between">
               <div className="flex flex-col mb-2 md:mb-0">
                 <div className="flex items-center gap-2">
-                  {item.sound && (
-                    <button
-                      onClick={() => playSound(item.sound)}
-                      title="Ouvir som"
-                    >
-                      <GiMusicalNotes className="w-5 h-5 text-amber-600" />
-                    </button>
-                  )}
-
                   <p className="text-xl text-center font-bold text-amber-700 truncate">
                     {item.english}
                   </p>
@@ -107,16 +95,30 @@ const English = () => {
                 </p>
               </div>
 
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between gap-1 mt-3">
+                {item.sound && (
+                  <button
+                    onClick={() => playSound(item.sound)}
+                    title="Ouvir som"
+                    className="flex-1 border border-amber-200 p-2 rounded text-amber-600 focus:bg-amber-600 focus:text-white"
+                  >
+                    <GiMusicalNotes className="w-5 h-5 m-auto" />
+                  </button>
+                )}
+
                 <button
                   onClick={() => readTitle(item.english)}
                   title="Ouvir título"
+                  className="flex-1 border border-amber-200 p-2 rounded text-amber-600 focus:bg-amber-600 focus:text-white"
                 >
-                  <GiSpeaker className="w-6 h-6 text-amber-600" />
+                  <GiSpeaker className="w-6 h-6 m-auto" />
                 </button>
 
-                <Link to={`/wordgame/${item._id}/en`}>
-                  <GrGamepad className="w-6 h-6 text-amber-600" />
+                <Link
+                  to={`/wordgame/${item._id}/en`}
+                  className="flex-1 border border-amber-200 p-2 rounded text-amber-600 focus:bg-amber-600 focus:text-white"
+                >
+                  <GrGamepad className="w-6 h-6 m-auto" />
                 </Link>
               </div>
             </div>

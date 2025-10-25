@@ -162,30 +162,30 @@ const Store = () => {
                   {story.title}
                 </h3>
 
-                <div className="inline-flex gap-5">
+                <div className="inline-flex gap-2 ">
                   <button
                     onClick={() => speakStory(story._id, story.text)}
                     type="button"
-                    className="inline-flex items-center p-2 text-sm font-medium text-black rounded-md dark:bg-orange-800 dark:text-white hover:bg-orange-300"
+                    className="inline-flex items-center p-2 text-sm font-medium border text-amber-600 border-amber-200 rounded dark:bg-orange-800 dark:text-white focus:bg-amber-600 focus:text-white"
                   >
                     {readingId === story._id ? (
-                      <GiSoundOff className="w-7 h-7" />
+                      <GiSoundOff className="w-6 h-6" />
                     ) : (
-                      <GiMusicalNotes className="w-7 h-7" />
+                      <GiMusicalNotes className="w-6 h-6" />
                     )}
                   </button>
 
                   <button
                     onClick={() => deleteHistory(story._id)}
                     type="button"
-                    className="inline-flex items-center p-2 text-sm font-medium text-black rounded-md dark:bg-orange-800 dark:text-white hover:bg-orange-300"
+                    className="inline-flex items-center py-2 px-3 text-sm font-medium border text-amber-600 border-amber-200 rounded dark:bg-orange-800 dark:text-white focus:bg-amber-600 focus:text-white"
                   >
                     <FaRegTrashCan className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
-              <div className="text-lg text-amber-600 font-normal">
+              <div className="text-lg text-amber-600 font-normal leading-tight">
                 {story.text}
               </div>
             </div>

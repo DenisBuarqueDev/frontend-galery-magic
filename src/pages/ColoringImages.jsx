@@ -27,7 +27,7 @@ const ColoringImages = () => {
         </div>
       )}
 
-      <TopOfPage title="Colorindo Imagem" subtitle="Escolha para colorir!" />
+      <TopOfPage title="Colorir" subtitle="Imagens para colorir!" />
 
       <div className="mt-6 flex flex-col items-center gap-2 max-w-screen-xl w-full px-3">
         {images.length === 0 ? (

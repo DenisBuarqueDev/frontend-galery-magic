@@ -20,10 +20,10 @@ const WordMatchGame = () => {
     if (!products || products.length === 0) return;
 
     setLoading(true);
-    setMessage("🔄 Embaralhando palavras...");
+    setMessage("Embaralhando palavras...");
 
     setTimeout(() => {
-      const random = shuffleArray(products).slice(0, 7);
+      const random = shuffleArray(products).slice(0, 5);
 
       const pt = shuffleArray(
         random.map((item) => ({
@@ -78,14 +78,14 @@ const WordMatchGame = () => {
         setMatched((prev) => [...prev, first.id, second.id]);
         setSelected([]);
         setScore((prev) => prev + 10);
-        setMessage("🎯 Correto!");
+        setMessage("Acertou!");
         // Som opcional:
         // new Audio("/sounds/correct.mp3").play();
         setTimeout(() => setMessage(""), 700);
       } else {
         // ❌ Errou
         setScore((prev) => Math.max(prev - 3, 0));
-        setMessage("😅 Tente novamente!");
+        setMessage("Tente novamente!");
         // Som opcional:
         // new Audio("/sounds/wrong.mp3").play();
         setTimeout(() => {
@@ -101,17 +101,10 @@ const WordMatchGame = () => {
 
   const handleReset = () => {
     setResetting(true);
-    setMessage("🔄 Reiniciando...");
+    setMessage("Reiniciando...");
     initGame();
   };
 
-  /*if (loading)
-    return (
-      <div className="text-center mt-8 text-lg animate-pulse">
-        Carregando palavras...
-      </div>
-    );
-*/
   return (
     <main className="flex flex-col p-3 m-auto w-full max-w-screen-xl md:p-4">
       {loading && (
@@ -123,22 +116,31 @@ const WordMatchGame = () => {
         </div>
       )}
 
-      <TopOfPage title="Combine Palavras" subtitle="Português com Inglês" />
+      {message && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+          <p className="text-2xl text-white font-bold mt-4">{message}</p>
+        </div>
+      )}
+
+      <TopOfPage title="Combine" subtitle="Português com Inglês" />
 
       <div className="flex flex-col items-center">
+        {/* Mensagem final */}
+        {allMatched && (
+          <div className="text-xl font-bold text-amber-700 animate-bounce text-center">
+            <span className="text-amber-700 text-2xl">
+              Você completou o jogo!
+            </span>
+          </div>
+        )}
+
         {/* Pontuação */}
         <div className="mb-4 text-lg font-semibold text-amber-600">
           Pontuação: <span className="font-bold text-amber-800">{score}</span>
         </div>
 
-        {message && (
-          <div className="text-lg font-semibold mb-3 text-center animate-fade">
-            {message}
-          </div>
-        )}
-
         {/* GRID lateral */}
-        <div className="grid grid-cols-2 gap-3 max-w-2xl w-full">
+        <div className="grid grid-cols-2 gap-2 max-w-2xl w-full">
           {/* Coluna esquerda - Português */}
           <div className="flex flex-col gap-3">
             {ptCards.map((card) => {
@@ -150,13 +152,13 @@ const WordMatchGame = () => {
                   key={card.id}
                   onClick={() => handleSelect(card)}
                   disabled={isMatched || resetting}
-                  className={`p-3 rounded-xl shadow-md text-center text-2xl transition-all duration-300 transform
+                  className={`p-2 rounded-full text-center text-xl transition-all duration-300 transform
                     ${
                       isMatched
                         ? "bg-amber-700 text-white"
                         : isSelected
-                        ? "bg-amber-500 scale-105"
-                        : "bg-white hover:bg-gray-100 active:scale-95"
+                        ? "bg-amber-500 text-white scale-105"
+                        : "border border-amber-600 text-amber-600 hover:bg-gray-100 active:scale-95"
                     }
                   `}
                 >
@@ -177,13 +179,13 @@ const WordMatchGame = () => {
                   key={card.id}
                   onClick={() => handleSelect(card)}
                   disabled={isMatched || resetting}
-                  className={`p-3 rounded-xl shadow-md text-center text-2xl transition-all duration-300 transform
+                  className={`p-2 rounded-full text-center text-xl transition-all duration-300 transform
                     ${
                       isMatched
                         ? "bg-amber-700 text-white"
                         : isSelected
-                        ? "bg-amber-500 scale-105"
-                        : "bg-white hover:bg-gray-100 active:scale-95"
+                        ? "bg-amber-500 text-white scale-105"
+                        : "border border-amber-600 text-amber-600 hover:bg-gray-100 active:scale-95"
                     }
                   `}
                 >
@@ -194,25 +196,14 @@ const WordMatchGame = () => {
           </div>
         </div>
 
-        {/* Mensagem final */}
-        {allMatched && (
-          <div className="mt-6 text-xl font-bold text-amber-700 animate-bounce text-center">
-            Parabéns!
-            <br />
-            <span className="text-amber-600 text-lg">
-              Você completou o jogo!
-            </span>
-          </div>
-        )}
-
         {/* Botão Reset */}
         <button
           onClick={handleReset}
           disabled={resetting}
-          className={`mt-6 px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+          className={`mt-6 p-2 text-xl rounded-full max-w-screen-sm w-full font-normal transition-all duration-300 ${
             resetting
               ? "bg-gray-400 text-white cursor-not-allowed"
-              : "bg-amber-500 text-white hover:bg-amber-500"
+              : "border border-amber-600 text-amber-600 hover:bg-amber-500 hover:text-white "
           }`}
         >
           {resetting ? "Reiniciando..." : "Jogar novamente"}

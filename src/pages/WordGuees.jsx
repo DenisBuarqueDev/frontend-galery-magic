@@ -12,10 +12,9 @@ const WordGuees = () => {
 
   // Seleciona um produto aleatório e cria 5 opções
   const getRandomProduct = () => {
-    if (!products || products.length < 6) return;
+    if (!products || products.length < 5) return;
 
-    const randomProduct =
-      products[Math.floor(Math.random() * products.length)];
+    const randomProduct = products[Math.floor(Math.random() * products.length)];
 
     // Gera 4 opções erradas
     const wrongOptions = products
@@ -44,7 +43,7 @@ const WordGuees = () => {
     if (!currentProduct) return;
 
     if (option === currentProduct.english) {
-      setMessage("🎉 Muito bem! Você acertou!");
+      setMessage("Você acertou!");
       setScore((prev) => prev + 1);
 
       // Espera 1,5s e vai para próxima imagem
@@ -52,7 +51,7 @@ const WordGuees = () => {
         getRandomProduct();
       }, 1500);
     } else {
-      setMessage("❌ Tente novamente!");
+      setMessage("Tente novamente!");
     }
   };
 
@@ -61,10 +60,25 @@ const WordGuees = () => {
 
   return (
     <main className="flex flex-col items-center justify-center p-4">
+      
       <TopOfPage
-        title="Adivinhe a Palavra"
-        subtitle="Toque na palavra certa!"
+        title="Adivinhe"
+        subtitle="Qual é a palavra?"
       />
+
+      {message && (
+          <div
+            className={`text-xl font-normal rounded-full px-8 py-1 text-center ${
+              message.includes("Você acertou!") ? "text-white bg-blue-500" : "text-white bg-red-500"
+            }`}
+          >
+            {message}
+          </div>
+        )}
+
+      <div className=" text-lg font-semibold text-gray-600">
+        Pontuação: {score}
+      </div>
 
       <div className="mt-6 flex flex-col items-center gap-4 max-w-screen-sm w-full px-4">
         <img
@@ -73,31 +87,19 @@ const WordGuees = () => {
           className="w-48 h-48 object-contain"
         />
 
-        <div className="grid grid-cols-1 gap-3 mt-6 w-full">
+        <div className="grid grid-cols-1 gap-3 mt-1 w-full">
           {options.map((option) => (
             <button
               key={option}
               onClick={() => handleAnswer(option)}
-              className="bg-white text-2xl w-full py-2 px-4 rounded-xl shadow hover:bg-yellow-100 transition-all border-2 border-transparent hover:border-yellow-400"
+              className="text-2xl border border-amber-300 text-amber-600 w-full py-2 px-4 rounded-full shadow hover:bg-amber-500 hover:text-white transition-all border-transparent"
             >
               {option}
             </button>
           ))}
         </div>
 
-        {message && (
-          <div
-            className={`mt-4 text-xl font-bold ${
-              message.includes("Muito bem") ? "text-green-600" : "text-red-500"
-            }`}
-          >
-            {message}
-          </div>
-        )}
-
-        <div className="mt-4 text-lg font-semibold text-gray-600">
-          Pontuação: {score}
-        </div>
+        
       </div>
     </main>
   );
